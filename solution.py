@@ -1,4 +1,22 @@
-string = "((3*7)/5*6*3)"
+string = "((2+3*6)+(2-3)*6)/(7+2)"
+
+
+def check_global_brackets(line):
+    length = len(line)
+
+    stack = []
+
+    for i in range(length):
+        if line[i] == '(':
+            stack.append(0)
+        elif line[i] == ')':
+            stack.pop()
+            if len(stack) == 0:
+                if i == length - 1:
+                    return True
+                else:
+                    return False
+
 
 class Node:
     def __init__(self, value):
@@ -20,12 +38,12 @@ class Node:
 
 
 def iterate(line, stack, oper1, oper2):
-    for i in range(len(line)):
+    for i in reversed(range(len(line))):
         ch = line[i]
 
-        if ch == '(':
-            stack.append(0)
         if ch == ')':
+            stack.append(0)
+        if ch == '(':
             stack.pop()
 
         if len(stack) == 0 and (ch == oper1 or ch == oper2):
@@ -43,7 +61,8 @@ def func(line):
     stack = []
 
     if line[0] == '(' and line[-1] == ')':
-        line = line[1: -1]
+        if check_global_brackets(line):
+            line = line[1: -1]
 
     result_node = iterate(line, stack, "+", "-")
     if result_node:
